@@ -1,7 +1,6 @@
 'use strict';
 
-/////////////////////////////////////////////////
-/////////////////////////////////////////////////
+
 // BANKIST APP
 
 // Data
@@ -61,16 +60,32 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
-/////////////////////////////////////////////////
-/////////////////////////////////////////////////
-// LECTURES
+const displayMovements = function (movements) {
+  containerMovements.innerHTML = '';
+  movements.forEach(function (mov, i) {
+    const type = mov > 0 ? 'deposit' : 'withdrawal';
+    const html = `
+      <div class="movements__row">
+        <div class="movements__type movements__type--${type}">${i + 1 }  ${type}</div>
+        <div class="movements__value">${mov}€</div>
+      </div>`;
+    containerMovements.insertAdjacentHTML('afterbegin', html);
+  });
+};
 
-const currencies = new Map([
-  ['USD', 'United States dollar'],
-  ['EUR', 'Euro'],
-  ['GBP', 'Pound sterling'],
-]);
+const calcDisplayPrintBalance =function (movements){
+  const balance = movements.reduce((acc,mov)=>acc + mov ,0);
+  labelBalance.textContent = `${balance}€`
+};
+calcDisplayPrintBalance(account1.movements);
 
-const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
-/////////////////////////////////////////////////
+displayMovements(account1.movements);
+
+const createUserName = function (accs) {
+  accs.forEach(function (acc) {
+    acc.username = acc.owner.toLowerCase().split(' ').map(name => name[0]).join('');
+  })
+}
+createUserName(accounts);
+
